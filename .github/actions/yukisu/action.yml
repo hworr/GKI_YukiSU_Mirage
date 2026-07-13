@@ -1,0 +1,70 @@
+name: Setup YukiSU
+description: Download and configure YukiSU with version tracking
+inputs:
+  yukisu_branch:
+    description: 'YukiSU branch or commit (empty = latest feat/yukizygisk branch tip)'
+    required: false
+    default: ""
+
+runs:
+  using: composite
+  steps:
+    - name: Download YukiSU
+      shell: bash
+      working-directory: ${{ github.workspace }}/kernel
+      run: |
+        set -euo pipefail
+
+        YUKISU_REPO="https://github.com/Anatdx/YukiSU.git"
+        YUKISU_INPUT="${{ inputs.yukisu_branch }}"
+        if [ -z "$YUKISU_INPUT" ]; then
+          YUKISU_INPUT="feat/yukizygisk"
+        fi
+
+        # Try as branch first, fall back to commit
+        if git ls-remote --heads "$YUKISU_REPO" "$YUKISU_INPUT" | grep -q .; then
+          echo "Using YukiSU branch: $YUKISU_INPUT"
+          curl -LSs "https://raw.githubusercontent.com/Anatdx/YukiSU/main/kernel/setup.sh" | bash -s "$YUKISU_INPUT"
+        else
+          echo "Using YukiSU commit: $YUKISU_INPUT"
+          curl -LSs "https://raw.githubusercontent.com/Anatdx/YukiSU/main/kernel/setup.sh" | bash -s "$YUKISU_INPUT"
+        fi
+
+        cd YukiSU/kernel
+        
+        COMMITS_COUNT=$(/usr/bin/git rev-list --count HEAD)
+        BASE_VERSION=30000
+        YUKISU_VERSION=$(expr $COMMITS_COUNT "+" $BASE_VERSION)
+        sed -i "s/^KSU_VERSION_FALLBACK := 1$/KSU_VERSION_FALLBACK := ${YUKISU_VERSION}/" Kbuild
+
+        YUKISU_GIT_TAG="$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.1")"
+        sed -i "s/^KSU_VERSION_TAG_FALLBACK := v0.0.1$/KSU_VERSION_TAG_FALLBACK := ${YUKISU_GIT_TAG}/" Kbuild
+    
+    - name: Extract YukiSU Version Info
+      id: yukisu-version
+      shell: bash
+      working-directory: ${{ github.workspace }}/kernel/YukiSU
+      run: |
+        # Fetch main branch for version info (tags, commits, etc.)
+        git fetch --depth=50 origin main 2>/dev/null || true
+        
+        # Extract and export YukiSU version info from main branch
+        YUKISU_GIT_VERSION=$(git rev-list --count origin/main 2>/dev/null)
+        YUKISU_GIT_TAG=$(git describe --tags --abbrev=0 origin/main 2>/dev/null || echo "")
+        YUKISU_COMMIT=$(git rev-parse --short origin/main 2>/dev/null)
+        YUKISU_VERSION=$((30000 + YUKISU_GIT_VERSION))
+        
+        echo "YUKISU_GIT_TAG=$YUKISU_GIT_TAG" >> $GITHUB_ENV
+        echo "YUKISU_VERSION=$YUKISU_VERSION" >> $GITHUB_ENV
+        echo "YUKISU_COMMIT=$YUKISU_COMMIT" >> $GITHUB_ENV
+
+    - name: Enable Kernel Configs
+      uses: ./.github/actions/set-kernel-config
+      with:
+        config_list: |
+          CONFIG_KSU=m
+          CONFIG_KPROBES=y
+          CONFIG_HAVE_KPROBES=y
+          CONFIG_KPROBE_EVENTS=y
+          CONFIG_KRETPROBES=y
+          CONFIG_HAVE_SYSCALL_TRACEPOINTS=y

@@ -28,65 +28,38 @@ jobs:
             printf '%s' "$value"
           }
 
-          gitlab_latest_commit() {
-            local branch="$1"
-            curl -fsSL "https://gitlab.com/api/v4/projects/simonpunk%2Fsusfs4ksu/repository/commits?ref_name=${branch}&per_page=1" | jq -r '.[0].id'
-          }
-
-          gitlab_latest_message() {
-            local branch="$1"
-            curl -fsSL "https://gitlab.com/api/v4/projects/simonpunk%2Fsusfs4ksu/repository/commits?ref_name=${branch}&per_page=1" | jq -r '.[0].message | split("\n")[0]'
-          }
-
           github_latest_commit() {
-            curl -fsSL "https://api.github.com/repos/pershoot/KernelSU-Next/commits/dev-susfs" | jq -r '.sha'
+            local branch="$1"
+            curl -fsSL "https://api.github.com/repos/Anatdx/YukiSU/commits/${branch}" | jq -r '.sha'
           }
 
           github_latest_message() {
-            curl -fsSL "https://api.github.com/repos/pershoot/KernelSU-Next/commits/dev-susfs" | jq -r '.commit.message | split("\n")[0]'
+            local branch="$1"
+            curl -fsSL "https://api.github.com/repos/Anatdx/YukiSU/commits/${branch}" | jq -r '.commit.message | split("\n")[0]'
           }
 
           {
             echo "# Commit Status Report"
             echo ""
-            echo "This report shows the latest upstream commit for each supported SUSFS branch plus KernelSU-Next."
+            echo "This report shows the latest upstream commit for YukiSU."
             echo ""
           } >> "$summary_file"
 
           {
-            echo "## SUSFS"
+            echo "## YukiSU"
             echo ""
             echo "| Branch | Latest Commit | Latest Message |"
             echo "| --- | --- | --- |"
           } >> "$summary_file"
 
-          SUSFS_BRANCHES=(
-            "gki-android12-5.10"
-            "gki-android13-5.10"
-            "gki-android13-5.15"
-            "gki-android14-5.15"
-            "gki-android14-6.1"
-            "gki-android15-6.6"
-            "gki-android16-6.12"
+          YUKISU_BRANCHES=(
+            "main"
+            "feat/yukizygisk"
           )
 
-          for branch in "${SUSFS_BRANCHES[@]}"; do
-            latest_commit="$(gitlab_latest_commit "$branch")"
-            latest_message="$(gitlab_latest_message "$branch")"
+          for branch in "${YUKISU_BRANCHES[@]}"; do
+            latest_commit="$(github_latest_commit "$branch")"
+            latest_message="$(github_latest_message "$branch")"
             latest_message="$(sanitize_cell "$latest_message")"
             printf '| %s | %s | %s |\n' "$branch" "$latest_commit" "$latest_message" >> "$summary_file"
           done
-
-          {
-            echo ""
-            echo "## KernelSU-Next"
-            echo ""
-            echo "| Branch | Latest Commit | Latest Message |"
-            echo "| --- | --- | --- |"
-          } >> "$summary_file"
-
-          latest_kernelsu_commit="$(github_latest_commit)"
-          latest_kernelsu_message="$(github_latest_message)"
-          latest_kernelsu_message="$(sanitize_cell "$latest_kernelsu_message")"
-
-          printf '| %s | %s | %s |\n' "dev-susfs" "$latest_kernelsu_commit" "$latest_kernelsu_message" >> "$summary_file"

@@ -11,13 +11,8 @@ on:
         description: "Feature Set"
         required: false
         type: string
-      ksu_branch:
-        description: "KernelSU branch or commit (empty = latest dev)"
-        required: false
-        type: string
-        default: ""
-      susfs_commit:
-        description: "SUSFS commit hash (empty = latest on auto-derived branch)"
+      yukisu_branch:
+        description: "YukiSU branch or commit (empty = latest main)"
         required: false
         type: string
         default: ""
@@ -92,6 +87,5 @@ jobs:
       os_patch_level: ${{ matrix.os_patch_level }}
       variant: ${{ matrix.variant }}
       feature_set: ${{ inputs.feature_set }}
-      ksu_branch: ${{ inputs.ksu_branch }}
-      susfs_commit: ${{ inputs.susfs_commit }}
+      yukisu_branch: ${{ inputs.yukisu_branch }}
     secrets: inherit

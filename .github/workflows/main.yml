@@ -32,59 +32,19 @@ on:
         description: "Feature Set"
         type: choice
         options:
-          - KSUN+SUSFS+BBG+NET+DS+NM
-          - KSUN+SUSFS+BBG+NET+DS
-          - KSUN+SUSFS+BBG+NM
-          - KSUN+SUSFS+BBG
-          - KSUN+SUSFS+NET
-          - KSUN+SUSFS+DS
-          - KSUN+SUSFS+NM
-          - KSUN+SUSFS
-          - KSUN+BBG
-          - KSUN+NET
-          - KSUN+DS
-          - KSUN+NM
-          - KSUN
+          - YUKISU+BBG+NET+DS+NM
+          - YUKISU+BBG+NET+DS
+          - YUKISU+BBG+NM
+          - YUKISU+BBG
+          - YUKISU+NET
+          - YUKISU+DS
+          - YUKISU+NM
+          - YUKISU
           - NONE
           - FULL
         default: FULL
-      ksu_branch:
-        description: "KernelSU branch or commit (empty = latest dev-susfs branch tip)"
-        type: string
-        required: false
-        default: ""
-      susfs_commit_android12-5-10:
-        description: "SUSFS commit for android12-5.10 (empty = latest branch tip)"
-        type: string
-        required: false
-        default: ""
-      susfs_commit_android13-5-10:
-        description: "SUSFS commit for android13-5.10 (empty = latest branch tip)"
-        type: string
-        required: false
-        default: ""
-      susfs_commit_android13-5-15:
-        description: "SUSFS commit for android13-5.15 (empty = latest branch tip)"
-        type: string
-        required: false
-        default: ""
-      susfs_commit_android14-5-15:
-        description: "SUSFS commit for android14-5.15 (empty = latest branch tip)"
-        type: string
-        required: false
-        default: ""
-      susfs_commit_android14-6-1:
-        description: "SUSFS commit for android14-6.1 (empty = latest branch tip)"
-        type: string
-        required: false
-        default: ""
-      susfs_commit_android15-6-6:
-        description: "SUSFS commit for android15-6.6 (empty = latest branch tip)"
-        type: string
-        required: false
-        default: ""
-      susfs_commit_android16-6-12:
-        description: "SUSFS commit for android16-6.12 (empty = latest branch tip)"
+      yukisu_branch:
+        description: "YukiSU branch or commit (empty = latest main branch tip)"
         type: string
         required: false
         default: ""
@@ -129,8 +89,7 @@ jobs:
     with:
       config_file: .github/config/android12-5.10.json
       feature_set: ${{ inputs.feature_set || 'FULL' }}
-      ksu_branch: ${{ inputs.ksu_branch }}
-      susfs_commit: ${{ inputs.susfs_commit_android12-5-10 }}
+      yukisu_branch: ${{ inputs.yukisu_branch }}
     secrets: inherit
 
   build-android13-5-10:
@@ -140,8 +99,7 @@ jobs:
     with:
       config_file: .github/config/android13-5.10.json
       feature_set: ${{ inputs.feature_set || 'FULL' }}
-      ksu_branch: ${{ inputs.ksu_branch }}
-      susfs_commit: ${{ inputs.susfs_commit_android13-5-10 }}
+      yukisu_branch: ${{ inputs.yukisu_branch }}
     secrets: inherit
 
   build-android13-5-15:
@@ -151,8 +109,7 @@ jobs:
     with:
       config_file: .github/config/android13-5.15.json
       feature_set: ${{ inputs.feature_set || 'FULL' }}
-      ksu_branch: ${{ inputs.ksu_branch }}
-      susfs_commit: ${{ inputs.susfs_commit_android13-5-15 }}
+      yukisu_branch: ${{ inputs.yukisu_branch }}
     secrets: inherit
 
   build-android14-5-15:
@@ -162,8 +119,7 @@ jobs:
     with:
       config_file: .github/config/android14-5.15.json
       feature_set: ${{ inputs.feature_set || 'FULL' }}
-      ksu_branch: ${{ inputs.ksu_branch }}
-      susfs_commit: ${{ inputs.susfs_commit_android14-5-15 }}
+      yukisu_branch: ${{ inputs.yukisu_branch }}
     secrets: inherit
 
   build-android14-6-1:
@@ -173,8 +129,7 @@ jobs:
     with:
       config_file: .github/config/android14-6.1.json
       feature_set: ${{ inputs.feature_set || 'FULL' }}
-      ksu_branch: ${{ inputs.ksu_branch }}
-      susfs_commit: ${{ inputs.susfs_commit_android14-6-1 }}
+      yukisu_branch: ${{ inputs.yukisu_branch }}
     secrets: inherit
 
   build-android15-6-6:
@@ -184,8 +139,7 @@ jobs:
     with:
       config_file: .github/config/android15-6.6.json
       feature_set: ${{ inputs.feature_set || 'FULL' }}
-      ksu_branch: ${{ inputs.ksu_branch }}
-      susfs_commit: ${{ inputs.susfs_commit_android15-6-6 }}
+      yukisu_branch: ${{ inputs.yukisu_branch }}
     secrets: inherit
 
   build-android16-6-12:
@@ -195,8 +149,7 @@ jobs:
     with:
       config_file: .github/config/android16-6.12.json
       feature_set: ${{ inputs.feature_set || 'FULL' }}
-      ksu_branch: ${{ inputs.ksu_branch }}
-      susfs_commit: ${{ inputs.susfs_commit_android16-6-12 }}
+      yukisu_branch: ${{ inputs.yukisu_branch }}
     secrets: inherit
 
   rej:
@@ -314,7 +267,7 @@ jobs:
           echo "# 📋 Build Summary — $(date -u '+%Y-%m-%d %H:%M UTC')"
           echo
           echo "**Feature Set:** ${{ inputs.feature_set }}"
-          echo "**KSU Branch:** ${{ inputs.ksu_branch || 'latest dev' }}"
+          echo "**YukiSU Branch:** ${{ inputs.yukisu_branch || 'latest main' }}"
           echo
           
           # Count successes and failures
@@ -350,14 +303,6 @@ jobs:
           done
           
           echo
-          echo "> **SUSFS Commits:**"
-          echo "> - android12-5.10: ${{ inputs.susfs_commit_android12-5-10 || 'latest' }}"
-          echo "> - android13-5.10: ${{ inputs.susfs_commit_android13-5-10 || 'latest' }}"
-          echo "> - android13-5.15: ${{ inputs.susfs_commit_android13-5-15 || 'latest' }}"
-          echo "> - android14-5.15: ${{ inputs.susfs_commit_android14-5-15 || 'latest' }}"
-          echo "> - android14-6.1: ${{ inputs.susfs_commit_android14-6-1 || 'latest' }}"
-          echo "> - android15-6.6: ${{ inputs.susfs_commit_android15-6-6 || 'latest' }}"
-          echo "> - android16-6.12: ${{ inputs.susfs_commit_android16-6-12 || 'latest' }}"
         } >> "$GITHUB_STEP_SUMMARY"
 
     - name: 🧹 Cleanup Summary Files
@@ -492,59 +437,59 @@ jobs:
 
         echo "release_title=$release_title" >> "$GITHUB_OUTPUT"
 
-    - name: Extract KernelSU Version Info
-      id: ksu_version
+    - name: Extract YukiSU Version Info
+      id: yukisu_version
       run: |
         set -euo pipefail
 
-        KSU_REPO="https://github.com/pershoot/KernelSU-Next.git"
-        KSU_INPUT="${{ inputs.ksu_branch }}"
-        if [ -z "$KSU_INPUT" ]; then
-          KSU_INPUT="dev-susfs"
+        YUKISU_REPO="https://github.com/Anatdx/YukiSU.git"
+        YUKISU_INPUT="${{ inputs.yukisu_branch }}"
+        if [ -z "$YUKISU_INPUT" ]; then
+          YUKISU_INPUT="main"
         fi
 
         # Try as branch first, fall back to commit
-        if git ls-remote --heads "$KSU_REPO" "$KSU_INPUT" | grep -q .; then
-          echo "Cloning KernelSU-Next from branch: $KSU_INPUT"
-          git clone --branch "$KSU_INPUT" "$KSU_REPO" /tmp/kernelsu-next
-          cd /tmp/kernelsu-next
-          KSUN_COMMIT=$(git rev-parse HEAD)
+        if git ls-remote --heads "$YUKISU_REPO" "$YUKISU_INPUT" | grep -q .; then
+          echo "Cloning YukiSU from branch: $YUKISU_INPUT"
+          git clone --branch "$YUKISU_INPUT" "$YUKISU_REPO" /tmp/yukisu
+          cd /tmp/yukisu
+          YUKISU_COMMIT=$(git rev-parse HEAD)
         else
-          echo "Cloning KernelSU-Next from dev-susfs branch, then checking out commit: $KSU_INPUT"
-          git clone --branch dev-susfs "$KSU_REPO" /tmp/kernelsu-next
-          cd /tmp/kernelsu-next
-          git fetch --depth=50 origin "$KSU_INPUT"
-          git checkout "$KSU_INPUT"
-          KSUN_COMMIT="$KSU_INPUT"
+          echo "Cloning YukiSU from main branch, then checking out commit: $YUKISU_INPUT"
+          git clone --branch main "$YUKISU_REPO" /tmp/yukisu
+          cd /tmp/yukisu
+          git fetch --depth=50 origin "$YUKISU_INPUT"
+          git checkout "$YUKISU_INPUT"
+          YUKISU_COMMIT="$YUKISU_INPUT"
         fi
 
         # Extract version info
         COMMITS_COUNT=$(git rev-list --count HEAD)
         BASE_VERSION=30000
-        KSU_VERSION=$(expr $COMMITS_COUNT "+" $BASE_VERSION)
+        YUKISU_VERSION=$(expr $COMMITS_COUNT "+" $BASE_VERSION)
 
         # Extract git tag
-        KSU_GIT_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "no-tag")
+        YUKISU_GIT_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "no-tag")
 
-        MANAGER_RUN_ID=$(curl -fsSL "https://api.github.com/repos/pershoot/KernelSU-Next/actions/workflows/build-manager-ci.yml/runs?head_sha=${KSUN_COMMIT}" | jq -r '.workflow_runs[0].id // empty')
+        MANAGER_RUN_ID=$(curl -fsSL "https://api.github.com/repos/Anatdx/YukiSU/actions/workflows/build.yml/runs?head_sha=${YUKISU_COMMIT}" | jq -r '.workflow_runs[0].id // empty')
         if [[ -n "${MANAGER_RUN_ID:-}" ]]; then
-          KSU_MANAGER="https://github.com/pershoot/KernelSU-Next/actions/runs/${MANAGER_RUN_ID}"
+          YUKISU_MANAGER="https://github.com/Anatdx/YukiSU/actions/runs/${MANAGER_RUN_ID}"
         else
-          KSU_MANAGER="https://github.com/pershoot/KernelSU-Next/actions/workflows/build-manager-ci.yml"
+          YUKISU_MANAGER="https://github.com/Anatdx/YukiSU/actions"
         fi
 
         echo "Commits count: $COMMITS_COUNT"
-        echo "KSU Version: $KSU_VERSION"
-        echo "KSU Git Tag: $KSU_GIT_TAG"
-        echo "KSU Manager: $KSU_MANAGER"
+        echo "YukiSU Version: $YUKISU_VERSION"
+        echo "YukiSU Git Tag: $YUKISU_GIT_TAG"
+        echo "YukiSU Manager: $YUKISU_MANAGER"
 
         # Export as environment for next step
-        echo "KSUN_BRANCH=$KSU_INPUT" >> $GITHUB_ENV
-        echo "KSUN_COMMIT=$KSUN_COMMIT" >> $GITHUB_ENV
-        echo "KSU_COMMITS_COUNT=$COMMITS_COUNT" >> $GITHUB_ENV
-        echo "KSU_VERSION=$KSU_VERSION" >> $GITHUB_ENV
-        echo "KSU_GIT_TAG=$KSU_GIT_TAG" >> $GITHUB_ENV
-        echo "KSU_MANAGER=$KSU_MANAGER" >> $GITHUB_ENV
+        echo "YUKISU_BRANCH=$YUKISU_INPUT" >> $GITHUB_ENV
+        echo "YUKISU_COMMIT=$YUKISU_COMMIT" >> $GITHUB_ENV
+        echo "YUKISU_COMMITS_COUNT=$COMMITS_COUNT" >> $GITHUB_ENV
+        echo "YUKISU_VERSION=$YUKISU_VERSION" >> $GITHUB_ENV
+        echo "YUKISU_GIT_TAG=$YUKISU_GIT_TAG" >> $GITHUB_ENV
+        echo "YUKISU_MANAGER=$YUKISU_MANAGER" >> $GITHUB_ENV
 
     - name: Set release body
       run: |

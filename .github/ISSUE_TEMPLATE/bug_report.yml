@@ -37,8 +37,8 @@ body:
 
   - type: input
     attributes:
-        label: KSUN Kernel Version
-        description: Your KSUN kernel version number
+        label: YukiSU Kernel Version
+        description: Your YukiSU kernel version number
         placeholder: "e.g., 13971"
     validations:
         required: true
@@ -48,7 +48,7 @@ body:
         label: Manager
         description: Which KernelSU manager you're using
         options:
-          - Wild KSU
+          - YukiSU
           - KernelSU Next
           - KernelSU
           - MKSU
