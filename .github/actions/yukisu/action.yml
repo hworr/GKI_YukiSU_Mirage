@@ -15,7 +15,7 @@ runs:
       run: |
         set -euo pipefail
 
-        YUKISU_REPO="https://github.com/Anatdx/YukiSU.git"
+        YUKISU_REPO="https://github.com/hworr93/YukiSU.git"
         YUKISU_INPUT="${{ inputs.yukisu_branch }}"
         if [ -z "$YUKISU_INPUT" ]; then
           YUKISU_INPUT="feat/yukizygisk"
@@ -24,10 +24,10 @@ runs:
         # Try as branch first, fall back to commit
         if git ls-remote --heads "$YUKISU_REPO" "$YUKISU_INPUT" | grep -q .; then
           echo "Using YukiSU branch: $YUKISU_INPUT"
-          curl -LSs "https://raw.githubusercontent.com/Anatdx/YukiSU/main/kernel/setup.sh" | bash -s "$YUKISU_INPUT"
+          curl -LSs "https://raw.githubusercontent.com/hworr93/YukiSU/main/kernel/setup.sh" | bash -s "$YUKISU_INPUT"
         else
           echo "Using YukiSU commit: $YUKISU_INPUT"
-          curl -LSs "https://raw.githubusercontent.com/Anatdx/YukiSU/main/kernel/setup.sh" | bash -s "$YUKISU_INPUT"
+          curl -LSs "https://raw.githubusercontent.com/hworr93/YukiSU/main/kernel/setup.sh" | bash -s "$YUKISU_INPUT"
         fi
 
         cd YukiSU/kernel
