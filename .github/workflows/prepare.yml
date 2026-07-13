@@ -16,6 +16,11 @@ on:
         required: false
         type: string
         default: ""
+      mirage_branch:
+        description: "Mirage branch or commit (empty = latest master)"
+        required: false
+        type: string
+        default: ""
 
 jobs:
   generate-matrix:
@@ -88,4 +93,5 @@ jobs:
       variant: ${{ matrix.variant }}
       feature_set: ${{ inputs.feature_set }}
       yukisu_branch: ${{ inputs.yukisu_branch }}
+      mirage_branch: ${{ inputs.mirage_branch }}
     secrets: inherit

@@ -48,6 +48,11 @@ on:
         type: string
         required: false
         default: ""
+      mirage_branch:
+        description: "Mirage branch or commit (empty = latest master branch tip)"
+        type: string
+        required: false
+        default: ""
 
 jobs:
   prepare-ccache:
@@ -90,6 +95,7 @@ jobs:
       config_file: .github/config/android12-5.10.json
       feature_set: ${{ inputs.feature_set || 'FULL' }}
       yukisu_branch: ${{ inputs.yukisu_branch }}
+      mirage_branch: ${{ inputs.mirage_branch }}
     secrets: inherit
 
   build-android13-5-10:
@@ -100,6 +106,7 @@ jobs:
       config_file: .github/config/android13-5.10.json
       feature_set: ${{ inputs.feature_set || 'FULL' }}
       yukisu_branch: ${{ inputs.yukisu_branch }}
+      mirage_branch: ${{ inputs.mirage_branch }}
     secrets: inherit
 
   build-android13-5-15:
@@ -110,6 +117,7 @@ jobs:
       config_file: .github/config/android13-5.15.json
       feature_set: ${{ inputs.feature_set || 'FULL' }}
       yukisu_branch: ${{ inputs.yukisu_branch }}
+      mirage_branch: ${{ inputs.mirage_branch }}
     secrets: inherit
 
   build-android14-5-15:
@@ -120,6 +128,7 @@ jobs:
       config_file: .github/config/android14-5.15.json
       feature_set: ${{ inputs.feature_set || 'FULL' }}
       yukisu_branch: ${{ inputs.yukisu_branch }}
+      mirage_branch: ${{ inputs.mirage_branch }}
     secrets: inherit
 
   build-android14-6-1:
@@ -130,6 +139,7 @@ jobs:
       config_file: .github/config/android14-6.1.json
       feature_set: ${{ inputs.feature_set || 'FULL' }}
       yukisu_branch: ${{ inputs.yukisu_branch }}
+      mirage_branch: ${{ inputs.mirage_branch }}
     secrets: inherit
 
   build-android15-6-6:
@@ -140,6 +150,7 @@ jobs:
       config_file: .github/config/android15-6.6.json
       feature_set: ${{ inputs.feature_set || 'FULL' }}
       yukisu_branch: ${{ inputs.yukisu_branch }}
+      mirage_branch: ${{ inputs.mirage_branch }}
     secrets: inherit
 
   build-android16-6-12:
@@ -150,6 +161,7 @@ jobs:
       config_file: .github/config/android16-6.12.json
       feature_set: ${{ inputs.feature_set || 'FULL' }}
       yukisu_branch: ${{ inputs.yukisu_branch }}
+      mirage_branch: ${{ inputs.mirage_branch }}
     secrets: inherit
 
   rej:

@@ -31,6 +31,10 @@ on:
         required: false
         type: string
         default: ""
+      mirage_branch:
+        required: false
+        type: string
+        default: ""
 
 jobs:
   build-gki:
@@ -160,11 +164,12 @@ jobs:
         version: ${{ inputs.version }}
         kernel_version: ${{ inputs.kernel_version }}
         
-    - name: Integrate NoMount
+    - name: Integrate Mirage
       if: contains(inputs.feature_set, 'NM') || inputs.feature_set == 'FULL'
       uses: ./.github/actions/nomount
       with:
-        kernel_version: ${{ inputs.kernel_version }}    
+        kernel_version: ${{ inputs.kernel_version }}
+        mirage_branch: ${{ inputs.mirage_branch }}    
 
     - name: Apply NTSync Patches
       uses: ./.github/actions/ntsync
