@@ -43,7 +43,7 @@ runs:
     - name: Extract YukiSU Version Info
       id: yukisu-version
       shell: bash
-      working-directory: ${{ github.workspace }}/kernel/YukiSU
+      working-directory: ${{ github.workspace }}/kernel/KernelSU
       run: |
         # Fetch main branch for version info (tags, commits, etc.)
         git fetch --depth=50 origin main 2>/dev/null || true
