@@ -33,6 +33,17 @@ runs:
           echo 'obj-$(CONFIG_MIRAGE) += mirage/' >> fs/Makefile
         fi
 
+    - name: Install Neovim
+      shell: bash
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y neovim
+
+    - name: Reformat Makefile with Neovim
+      shell: bash
+      run: |
+        nvim -c ":set noexpandtab | :retab! | :wq" "${{ github.workspace }}/kernel/common/Makefile"
+
     - name: Enable Config
       shell: bash
       working-directory: ${{ github.workspace }}/kernel
