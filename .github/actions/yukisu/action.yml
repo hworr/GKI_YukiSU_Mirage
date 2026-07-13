@@ -22,14 +22,17 @@ runs:
         fi
 
         # Try as branch first, fall back to commit
-        if git ls-remote --heads "$YUKISU_REPO" "$YUKISU_INPUT" | grep -q .; then
-          echo "Using YukiSU branch: $YUKISU_INPUT"
-          curl -LSs "https://raw.githubusercontent.com/hworr93/YukiSU/main/kernel/setup.sh" | bash -s "$YUKISU_INPUT"
-        else
-          echo "Using YukiSU commit: $YUKISU_INPUT"
-          curl -LSs "https://raw.githubusercontent.com/hworr93/YukiSU/main/kernel/setup.sh" | bash -s "$YUKISU_INPUT"
-        fi
+        #if git ls-remote --heads "$YUKISU_REPO" "$YUKISU_INPUT" | grep -q .; then
+        #  echo "Using YukiSU branch: $YUKISU_INPUT"
+        #  curl -LSs "https://raw.githubusercontent.com/hworr93/YukiSU/main/kernel/setup.sh" | bash -s "$YUKISU_INPUT"
+        #else
+        #  echo "Using YukiSU commit: $YUKISU_INPUT"
+        #  curl -LSs "https://raw.githubusercontent.com/hworr93/YukiSU/main/kernel/setup.sh" | bash -s "$YUKISU_INPUT"
+        #fi
 
+        git clone https://github.com/hworr93/YukiSU.git -b feat/yukizygisk
+        curl -LSs "https://raw.githubusercontent.com/hworr93/YukiSU/main/kernel/setup.sh" | bash -s feat/yukizygisk
+        
         cd YukiSU/kernel
         
         COMMITS_COUNT=$(/usr/bin/git rev-list --count HEAD)
