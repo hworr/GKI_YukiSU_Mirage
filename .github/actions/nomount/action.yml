@@ -23,6 +23,15 @@ runs:
         fi
         echo "Using Mirage branch: $MIRAGE_INPUT"
         curl -LSs "https://raw.githubusercontent.com/maxsteeel/Mirage/master/setup.sh" | bash -s "$MIRAGE_INPUT"
+        
+        # Fix Makefile - setup.sh has broken printf that adds invalid syntax
+        if [ -f "common/fs/Makefile" ]; then
+          sed -i '/^obj-\$(CONFIG_MIRAGE) += mirage/d' common/fs/Makefile
+          echo 'obj-$(CONFIG_MIRAGE) += mirage/' >> common/fs/Makefile
+        elif [ -f "fs/Makefile" ]; then
+          sed -i '/^obj-\$(CONFIG_MIRAGE) += mirage/d' fs/Makefile
+          echo 'obj-$(CONFIG_MIRAGE) += mirage/' >> fs/Makefile
+        fi
 
     - name: Enable Config
       shell: bash
